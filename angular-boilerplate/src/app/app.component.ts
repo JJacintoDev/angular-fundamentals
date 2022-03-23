@@ -1,5 +1,13 @@
 import {Component} from '@angular/core'
 
+interface Passenger {
+  id:number,
+  fullname: string,
+  checkedIn: boolean
+  checkedInDate: number | null /*, significa que pode ser um numero ou null*/
+  /*checkedInDate?: number , significa que pode existir ou não, se a api nao devolver nao mete e n tem problema*/
+}
+
 @Component({
   selector: 'app-root',
   styleUrls: ['app.component.sass'],
@@ -43,16 +51,117 @@ import {Component} from '@angular/core'
       <!--two way binding-->
       <div>
         <input type="text" [ngModel]="name" (ngModelChange)="handleChange($event)">
+        {{name}}
       </div>
       <!--two way binding sem o handle change func-->
       <div>
         <input type="text" [(ngModel)]="name">
+        {{name}}
       </div>
+
+<!--      template refs, diz ao agular que eu quero um ref de username-->
+      <button (click)="handleClickRef(username.value)">get valor no console log</button>
+      <div>
+        <input type="text" #username>
+        {{name}}
+      </div>
+
+<!--      ng-ifs basicamente conditional render do react-->
+<!--      quand usas o * tipo em *ngIf é uma directive do angular-->
+
+    <div *ngIf="name.length > 0">
+      searching for... {{name}}
+    </div>
+<!--      outra maneira de usar ngif é dentro de um template de shadowdom. o template usa a property binding com ngif-->
+      <!--<template [ngIf]="name.length>2">
+        <div>
+          searching for... {{name}}
+        </div>
+      </template>-->
+<!--    ng for-->
+      <h3>Airline passagers</h3>
+      <ul>
+        <li *ngFor="let passenger of passengers; let i = index;">
+         {{i}}: {{passenger.fullname }}
+        </li>
+      </ul>
+
+<!--      sintax com template tag, isto nunca funciona entao vou deixar de fazer isto sem directives *-->
+      <!--<h3>Airline passagers</h3>
+      <ul>
+        <template ngFor let-passenger let-i="index" [ngForOf]="passengers">
+        <li>
+          {{i}}: {{passenger.fullname }}
+        </li>
+        </template>
+      </ul>-->
+
+<!--      class e ngclass-->
+
+      <h3>Airline passagers</h3>
+      <ul>
+        <li *ngFor="let passenger of passengers; let i = index;">
+          <span class="status" [class.checked-in]="passenger.checkedIn"></span>
+          {{i}}: {{passenger.fullname }}
+        </li>
+      </ul>
+
+<!--      basicamente a diferença entre o class e o ngclass é que o class serve para varias linhas e nao so um.
+aqui ta comentado porque nao existe checkout definido-->
+      <!--<h3>Airline passagers</h3>
+      <ul>
+        <li *ngFor="let passenger of passengers; let i = index;">
+          <span class="status" [ngClass]="{
+          'checked-in': passenger.checkedIn,
+          'checked-out': !passenger.checkedIn,
+          }"></span>
+          {{i}}: {{passenger.fullname }}
+        </li>
+      </ul>-->
+      <!--      style e ngstyle-->
+<!--      style é o equivalente a element.style.background = 'red'; no javascript-->
+      <h3>Airline passagers</h3>
+      <ul>
+        <li *ngFor="let passenger of passengers; let i = index;">
+          <span class="status" [style.backgroundColor]="(passenger.checkedIn ? '#2ecc71' : '#c0392b')"></span>
+          {{i}}: {{passenger.fullname }}
+        </li>
+      </ul>
+
+<!--      wow ng funciona aqui estou estupefacto meu deus-->
+      <h3>Airline passagers</h3>
+      <ul>
+        <li *ngFor="let passenger of passengers; let i = index;">
+          <span class="status" [ngStyle]="{
+          backgroundColor: (passenger.checkedIn ? '#2ecc71' : '#c0392b')
+          }"></span>
+          {{i}}: {{passenger.fullname }}
+        </li>
+      </ul>
+      <!--      pipes, adoro os json pipes da pa ver o object inteiro demais-->
+      <h3>Airline passagers</h3>
+      <ul>
+        <li *ngFor="let passenger of passengers; let i = index;">
+          <span class="status" [ngStyle]="{
+          backgroundColor: (passenger.checkedIn ? '#2ecc71' : '#c0392b')
+          }"></span>
+          {{i}}: {{passenger.fullname }}
+          <p>{{passenger | json}}</p>
+          <!--este date pipe serve para converter date formats, é proprio do angular-->
+          <div class="date">
+            check in date: {{passenger.checkedInDate ? (passenger.checkedInDate | date: 'yMMMMd' | uppercase) : 'Not checked in'}}
+
+          </div>
+        </li>
+      </ul>
+
 
     </div>
   `
-
 })
+
+
+
 export class AppComponent {
   // title: string = 'Joao angular treino';
   //resto da interpolação, title aqui
@@ -62,6 +171,34 @@ export class AppComponent {
   isHappy: boolean = true;
   numberOne: number = 1;
   numberTwo: number = 2;
+
+  //passengers array para ngfor
+  passengers: Passenger[] = [{
+    id: 1,
+    fullname: 'maluco',
+    checkedIn: true,
+    checkedInDate: 1490742000000
+  }, {
+    id: 2,
+    fullname: 'doido',
+    checkedIn: false,
+    checkedInDate: null
+  }, {
+    id: 3,
+    fullname: 'XD?',
+    checkedIn: true,
+    checkedInDate: 1490742000000
+  }, {
+    id: 4,
+    fullname: 'nao',
+    checkedIn: false,
+    checkedInDate: 1490742000000
+  },{
+    id: 5,
+    fullname: 'talvez',
+    checkedIn: true,
+    checkedInDate: 1490742000000
+  }];
 
   handleClick() {
     this.name = "joao";
@@ -76,6 +213,11 @@ export class AppComponent {
   //twoway
   handleChange(value: string) {
     this.name = value;
+  }
+
+  //template refs
+  handleClickRef(value: string) {
+    console.log(value);
   }
 
   constructor() {
