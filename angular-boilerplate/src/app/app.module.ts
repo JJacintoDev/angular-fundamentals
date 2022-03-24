@@ -8,6 +8,8 @@ import {CommonModule} from '@angular/common'; //module para criar directives
 import {FormsModule} from '@angular/forms'; //module para forms
 //modules para server side rendering sao diferentes destes
 
+import { PassengerDashboardModule} from './passenger-dashboard/passenger-dashboard.module'
+
 import { AppComponent } from './app.component';
 
 @NgModule ({
@@ -18,9 +20,12 @@ import { AppComponent } from './app.component';
     //settingsComponent
   ],
   imports: [
+    //angular modules
     BrowserModule,
     CommonModule,
-    FormsModule
+    FormsModule,
+    //custom modules
+    PassengerDashboardModule
   ],
 bootstrap: [AppComponent]
 })

@@ -1,11 +1,17 @@
 import {Component} from '@angular/core'
 
+interface Child {
+  name: string,
+  age: number
+}
+
 interface Passenger {
   id:number,
   fullname: string,
-  checkedIn: boolean
-  checkedInDate: number | null /*, significa que pode ser um numero ou null*/
+  checkedIn: boolean,
+  checkedInDate: number | null, /*, significa que pode ser um numero ou null*/
   /*checkedInDate?: number , significa que pode existir ou não, se a api nao devolver nao mete e n tem problema*/
+  children:  Child[] | null
 }
 
 @Component({
@@ -155,7 +161,41 @@ aqui ta comentado porque nao existe checkout definido-->
         </li>
       </ul>
 
+      <!--      safe navigation-->
+      <h3>Airline passagers</h3>
+      <ul>
+        <li *ngFor="let passenger of passengers; let i = index;">
+          <span class="status" [ngStyle]="{
+          backgroundColor: (passenger.checkedIn ? '#2ecc71' : '#c0392b')
+          }"></span>
+          {{i}}: {{passenger.fullname }}
+          <p>{{passenger | json}}</p>
+          <!--este date pipe serve para converter date formats, é proprio do angular-->
+          <div class="date">
+            check in date: {{passenger.checkedInDate ? (passenger.checkedInDate | date: 'yMMMMd' | uppercase) : 'Not checked in'}}
 
+          </div>
+          <div class="children">
+<!--            safe navigation operator para o angular nao passar um erro no template, é o "?" -->
+            Children: {{ passenger.children?.length || 0}}
+          </div>
+        </li>
+      </ul>
+
+      <!--      smart e dumb/presentational components-->
+<!--      smart components: comunica com os services e da render a child components, pode lhes passar a data que ele recebeu dos services-->
+<!--      dumb/presentational component: aceita data via inputs e emite data changes atraves dos event outputs-->
+<!--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+      <!--      one way data flow-->
+<!--        quando um user faz uma change num component child de baixo, para passar para o smart component e para os serviços é utilizado events-->
+<!--      events, o angular tem uma feature built in que é o event emitter-->
+<!--      tenho de fazer um event pelos dumb components todos ate chegar ao smart-->
+<!--      apos uma change no smart, é preciso dar trigger a um rerender nos dumb para atualizar os dados-->
+<!--      data flows down, events emit up-->
+
+<!--      container components-->
+      <passenger-dashboard></passenger-dashboard>
     </div>
   `
 })
@@ -172,32 +212,37 @@ export class AppComponent {
   numberOne: number = 1;
   numberTwo: number = 2;
 
-  //passengers array para ngfor
+//passengers array para ngfor
   passengers: Passenger[] = [{
     id: 1,
     fullname: 'maluco',
     checkedIn: true,
-    checkedInDate: 1490742000000
+    checkedInDate: 1490742000000,
+    children: null
   }, {
     id: 2,
     fullname: 'doido',
     checkedIn: false,
-    checkedInDate: null
+    checkedInDate: null,
+    children: [{name: 'jessica', age: 1}]
   }, {
     id: 3,
     fullname: 'XD?',
     checkedIn: true,
-    checkedInDate: 1490742000000
+    checkedInDate: 1490742000000,
+    children: [{name: 'teresa', age: 3}]
   }, {
     id: 4,
     fullname: 'nao',
     checkedIn: false,
-    checkedInDate: 1490742000000
+    checkedInDate: 1490742000000,
+    children: null
   },{
     id: 5,
     fullname: 'talvez',
     checkedIn: true,
-    checkedInDate: 1490742000000
+    checkedInDate: 1490742000000,
+    children: [{name: 'sara', age: 30}]
   }];
 
   handleClick() {
