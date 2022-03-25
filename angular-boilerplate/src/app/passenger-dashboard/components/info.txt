@@ -1,0 +1,1 @@
+stateless child components folder, components ou seja, os dumb components, presentational components
