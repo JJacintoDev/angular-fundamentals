@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnChanges, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
 import {Passenger} from "../../models/passenger.interface"
 
@@ -39,7 +39,7 @@ import {Passenger} from "../../models/passenger.interface"
   `
 })
 
-export class PassengerDetailComponent {
+export class PassengerDetailComponent implements OnChanges, OnInit{
   @Input()
   detail: Passenger;
 
@@ -67,5 +67,17 @@ export class PassengerDetailComponent {
   onRemove() {
     //this.remove refere a variavel dentro do export no @output
     this.remove.emit(this.detail)
+  }
+
+  //serve para separar o data binding do parent do filho, ou seja quando atualizo o filho, o parent so atualiza quando faço confirmar nos dados
+  //ngonchanges é chamado antes do on init entao podemos mudar as variaveis antes do init
+  ngOnChanges(changes: any) {
+    if (changes.detail) {
+      this.detail = Object.assign({}, changes.detail.currentValue);
+    }
+  }
+
+  ngOnInit() {
+
   }
 }

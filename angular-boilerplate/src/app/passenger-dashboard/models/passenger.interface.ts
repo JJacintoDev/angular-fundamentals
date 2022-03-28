@@ -10,5 +10,6 @@ export interface Passenger {
   checkedIn: boolean,
   checkedInDate: number | null, /*, significa que pode ser um numero ou null*/
   /*checkedInDate?: number , significa que pode existir ou não, se a api nao devolver nao mete e n tem problema*/
-  children:  Child[] | null
+  children:  Child[] | null,
+  baggage?: string
 }

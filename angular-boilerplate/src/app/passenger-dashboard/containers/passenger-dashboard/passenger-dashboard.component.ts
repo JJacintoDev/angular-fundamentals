@@ -1,7 +1,7 @@
 //container component
 import {Component, OnInit} from '@angular/core';
-import {Passenger} from '../../models/passenger.interface'
-
+import {Passenger} from '../../models/passenger.interface';
+import {PassengerDashboardService} from '../../passenger-dashboard.service';
 
 @Component({
   selector: 'passenger-dashboard',
@@ -75,9 +75,17 @@ export class PassengerDashboardComponent implements OnInit{
     checkedInDate: 1490742000000,
     children: [{name: 'sara', age: 30}]
   }];
-  constructor() {}
+  //dependency injection no constructor
+  //fazer o equivalente de constructor(varivel) this.varivavel = variavel
+  //angular usa o token PassengerDashboardService e da bind internamente a propriedade do passengerSerice, ta a fazer this.passengerService = PassengerDashboardService
+  constructor(private passengerService: PassengerDashboardService) {}
   //lifecycle hook do angular, como tem ng a frente é o angular que lida. ngOnInit
   ngOnInit(){
+
+    //services dependency injection
+    // this.passengers = this.passengerService.getPassengers();
+
+    //mais cedo nos vids
     console.log(this.ngOnInit())
     this.passengers = [{
       id: 1,
