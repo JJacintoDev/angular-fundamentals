@@ -20,6 +20,15 @@ interface Passenger {
   // templateUrl: '/componentes.html',
   template: `
     <div class="app">
+      <nav class="nav">
+      <router-outlet></router-outlet>
+      <a
+        routerLink="/"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact: true}"
+      > home</a>
+      <a routerLink="/oops" routerLinkActive="active"> 404</a>
+      </nav>
 <!--      interpolação com uma expression-->
       <!--concat de strings-->
       <!--one way dataflow sintax-->

@@ -7,15 +7,27 @@ import {BrowserModule} from '@angular/platform-browser'; //module para web
 import {CommonModule} from '@angular/common'; //module para criar directives
 import {FormsModule} from '@angular/forms'; //module para forms
 //modules para server side rendering sao diferentes destes
+import {RouterModule, Routes} from '@angular/router'
 
 import { PassengerDashboardModule} from './passenger-dashboard/passenger-dashboard.module'
+import {HomeComponent} from './home.component'
+import {NotFoundComponent} from './not-found.component'
 
 import { AppComponent } from './app.component';
+
+const routes: Routes =[
+  //pathmatch diz que mesmo estando vazio, é o path completo do sitio
+  {path: '', component: HomeComponent, pathMatch: 'full'},
+  {path: '**', component: NotFoundComponent}
+];
+
 
 @NgModule ({
 //declarations declara os diferentes components, especie de classes exports do react por exemplo
   declarations: [
-    AppComponent
+    AppComponent,
+    HomeComponent,
+    NotFoundComponent
     //DashboardComponent
     //settingsComponent
   ],
@@ -23,6 +35,7 @@ import { AppComponent } from './app.component';
     //angular modules
     BrowserModule,
     CommonModule,
+    RouterModule.forRoot(routes),
     FormsModule,
     //custom modules
     PassengerDashboardModule
