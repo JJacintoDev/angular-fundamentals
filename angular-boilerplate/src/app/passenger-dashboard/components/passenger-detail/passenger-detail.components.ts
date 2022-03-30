@@ -35,6 +35,11 @@ import {Passenger} from "../../models/passenger.interface"
     <button (click)="onRemove()">
       remove
     </button>
+
+<!--    podia por um router link mas como é um stateless component meto um go to para o parent que é stateful-->
+    <button (click)="goToPassenger()">
+      view
+    </button>
   </div>
   `
 })
@@ -44,12 +49,16 @@ export class PassengerDetailComponent implements OnChanges, OnInit{
   detail: Passenger;
 
   @Output()
-  edit: EventEmitter<any> = new EventEmitter();
+  edit: EventEmitter<Passenger> = new EventEmitter<Passenger>();
 
   @Output()
     //cria um novo evento do angular, mas o EventEmitter <any> antes serve para definir o tipo de evento que estamos a criar
-  remove: EventEmitter <any> = new EventEmitter();
+  remove: EventEmitter <Passenger> = new EventEmitter<Passenger>();
   editing: boolean = false;
+
+  @Output()
+  view: EventEmitter<Passenger> = new EventEmitter<Passenger>();
+
   constructor() {
   }
   onNameChange(value: string) {
@@ -67,6 +76,10 @@ export class PassengerDetailComponent implements OnChanges, OnInit{
   onRemove() {
     //this.remove refere a variavel dentro do export no @output
     this.remove.emit(this.detail)
+  }
+
+  goToPassenger() {
+    this.view.emit(this.detail);
   }
 
   //serve para separar o data binding do parent do filho, ou seja quando atualizo o filho, o parent so atualiza quando faço confirmar nos dados

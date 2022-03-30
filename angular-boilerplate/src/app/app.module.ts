@@ -18,7 +18,8 @@ import { AppComponent } from './app.component';
 const routes: Routes =[
   //pathmatch diz que mesmo estando vazio, é o path completo do sitio
   {path: '', component: HomeComponent, pathMatch: 'full'},
-  {path: '**', component: NotFoundComponent}
+  {path: '**', component: NotFoundComponent},
+  {path: 'redirectlol', redirectTo:'passengers', pathMatch: 'full'}
 ];
 
 
@@ -35,7 +36,8 @@ const routes: Routes =[
     //angular modules
     BrowserModule,
     CommonModule,
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes, {useHash:true}),
+    // RouterModule.forRoot(routes, {useHash:true}), use hash é basicamente para browsers mais antigos
     FormsModule,
     //custom modules
     PassengerDashboardModule

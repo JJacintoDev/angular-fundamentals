@@ -2,6 +2,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Passenger} from '../../models/passenger.interface';
 import {PassengerDashboardService} from '../../passenger-dashboard.service';
+import {Router} from '@angular/router'
 
 @Component({
   selector: 'passenger-dashboard',
@@ -15,6 +16,7 @@ import {PassengerDashboardService} from '../../passenger-dashboard.service';
     <passenger-detail
       *ngFor="let passenger of passengers;"
       [detail]="passenger"
+      (view)="handleView($event)"
       (remove)="handleRemove($event)"
       (edit)="handleEdit($event)"
     ></passenger-detail>
@@ -78,7 +80,8 @@ export class PassengerDashboardComponent implements OnInit{
   //dependency injection no constructor
   //fazer o equivalente de constructor(varivel) this.varivavel = variavel
   //angular usa o token PassengerDashboardService e da bind internamente a propriedade do passengerSerice, ta a fazer this.passengerService = PassengerDashboardService
-  constructor(private passengerService: PassengerDashboardService) {}
+  constructor(private passengerService: PassengerDashboardService,
+  private router: Router) {}
   //lifecycle hook do angular, como tem ng a frente é o angular que lida. ngOnInit
   ngOnInit(){
 
@@ -138,5 +141,10 @@ export class PassengerDashboardComponent implements OnInit{
       //no evento ta a ser passado um event: passenger então o event tem event.id
       return passenger.id !== event.id;
     });
+  }
+
+  handleView(event: Passenger){
+  // dynamic imperative routing
+    this.router.navigate(['/passengers', event.id])
   }
 }

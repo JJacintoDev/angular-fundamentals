@@ -5,6 +5,12 @@ interface Child {
   age: number
 }
 
+interface Nav {
+  link: string,
+  name: string,
+  exact: boolean
+}
+
 interface Passenger {
   id:number,
   fullname: string,
@@ -21,14 +27,23 @@ interface Passenger {
   template: `
     <div class="app">
       <nav class="nav">
-      <router-outlet></router-outlet>
-      <a
-        routerLink="/"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{exact: true}"
-      > home</a>
-      <a routerLink="/oops" routerLinkActive="active"> 404</a>
+      <a href=""
+         *ngFor="let item of nav"
+         [routerLink]="item.link"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{exact: item.exact}"
+      >
+          {{item.name}}
+      </a>
+<!--        dynamic routing-->
+<!--      <a-->
+<!--        routerLink="/"-->
+<!--        routerLinkActive="active"-->
+<!--        [routerLinkActiveOptions]="{exact: true}"-->
+<!--      > home</a>-->
+<!--      <a routerLink="/oops" routerLinkActive="active"> 404</a>-->
       </nav>
+      <router-outlet></router-outlet>
 <!--      interpolação com uma expression-->
       <!--concat de strings-->
       <!--one way dataflow sintax-->
@@ -277,4 +292,21 @@ export class AppComponent {
   constructor() {
     this.title = 'Joao angular treino'
   }
+  //dynamic routing
+  nav: Nav[] = [
+    {
+      link: '/',
+      name: 'Home',
+      exact: true
+    },{
+      link: '/oops',
+      name: '404',
+      exact: false
+    },{
+      link: '/passengers',
+      name: 'Passengers',
+      exact: false
+    }
+  ]
+
 }
